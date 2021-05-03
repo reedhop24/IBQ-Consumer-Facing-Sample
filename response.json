@@ -1,0 +1,125 @@
+{
+    "Status": "Success",
+    "CityState": {
+     "City": "SPOKANE",
+     "State": "WA"
+    },
+    "Values": {
+     "TODAY": "2021-05-03",
+     "THISYEAR": 2021
+    },
+    "Models": {
+     "Customer": [
+      {
+       "Description": "Personal\/Commercial Lines Customer",
+       "Rules": "",
+       "Fields": {
+        "AppLastName": {
+         "Description": "Last name",
+         "Type": "VARCHAR(20);",
+         "Rules": "REQUIRED;VALID IF $REGEXP('^[ a-zA-Z]*-?[ a-zA-Z]*$',AppLastName) = 1 ELSE INVALID 'Must only contain letters, spaces and one hyphen';"
+        },
+        "AppFirstName": {
+         "Description": "First name",
+         "Type": "VARCHAR(18);",
+         "Rules": "REQUIRED;VALID IF $REGEXP('^[ a-zA-Z]*-?[ a-zA-Z]*$',AppFirstName) = 1 ELSE INVALID 'Must only contain letters, spaces and one hyphen';"
+        },
+        "AppEmail": {
+         "Description": "Email address",
+         "Type": "VARCHAR(60);",
+         "Rules": "REQUIRED;VALID IF $REGEXP('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9.-]+$',AppEmail) = 1 ELSE INVALID 'Email address is not formatted correctly';"
+        },
+        "AppBirthDate": {
+         "Description": "Birthdate",
+         "Type": "DATE;",
+         "Rules": "VALID IF $AGE(AppBirthDate) >= 16 AND $AGE(AppBirthDate) <= 105 ELSE INVALID 'Applicant age must be 16 - 105 years old';REQUIRED;"
+        },
+        "YearsCurAdd": {
+         "Description": "Years at current address",
+         "Type": "INT(2);",
+         "Rules": "SETFIELD 3;INVISIBLE;"
+        },
+        "MailSameAsLoc": {
+         "Description": "Mail address is the same as the residence",
+         "Type": "ENUM('','Yes','No');",
+         "Rules": "SETFIELD 'Yes';INVISIBLE;"
+        },
+        "ResidenceType": {
+         "Description": "Residence type",
+         "Type": "ENUM('','Owned Dwelling','Owned Condo','Owned Mobilehome','Rented Apartment','Rented Dwelling','Rented Condo','Rented Mobilehome');",
+         "Rules": "REQUIRED;"
+        },
+        "AgencyReferral": {
+         "Description": "How did you hear about us?",
+         "Type": "ENUM('','Customer Referral','Mailer','Radio','Newsletter','Internet','Solicited by Agent','Lead Purchased','Existing Customer','Other','Wiley Car Dealership','Jenny Agent','Re-Write');",
+         "Rules": "REQUIRED;"
+        }
+       }
+      }
+     ],
+     "Phone": [
+      {
+       "Description": "Personal\/Commercial Lines Phone",
+       "SetField": {
+        "Field": "Type",
+        "Value": "Home"
+       },
+       "Rules": "",
+       "Fields": {
+        "Type": {
+         "Description": "Type of phone",
+         "Type": "ENUM('','Home','Cell','Business','Fax');",
+         "Rules": "SETFIELD 'Home';INVISIBLE;"
+        },
+        "Number": {
+         "Description": "Phone number",
+         "Type": "VARCHAR(12);",
+         "Rules": "REQUIRED;VALID IF Number = '' OR $REGEXP('^[2-9][0-9]{2}-[0-9]{3}-[0-9]{4}$',Number) = 1 ELSE INVALID 'Must be nnn-nnn-nnnn and cannot start with 0 or 1';"
+        }
+       }
+      }
+     ],
+     "Address": [
+      {
+       "Description": "Personal\/Commercial Lines Address",
+       "SetField": {
+        "Field": "Type",
+        "Value": "Location"
+       },
+       "Rules": "",
+       "Fields": {
+        "Type": {
+         "Description": "Address type",
+         "Type": "ENUM('','Location','Mailing','Previous');",
+         "Rules": "SETFIELD 'Location';INVISIBLE;"
+        },
+        "Address": {
+         "Description": "Address",
+         "Type": "VARCHAR(45);",
+         "Rules": "REQUIRED;"
+        },
+        "City": {
+         "Description": "City",
+         "Type": "VARCHAR(19);",
+         "Rules": "SETFIELD 'SPOKANE' IF Type = 'Location';READONLY IF Type = 'Location';REQUIRED;"
+        },
+        "State": {
+         "Description": "State",
+         "Type": "CHAR(2);",
+         "Rules": "SETFIELD 'WA' IF Type = 'Location';READONLY IF Type = 'Location';REQUIRED;"
+        },
+        "Zip": {
+         "Description": "Zip code",
+         "Type": "VARCHAR(10);",
+         "Rules": "SETFIELD '99203' IF Type = 'Location';READONLY IF Type = 'Location';VALID IF $REGEXP('^[0-9]{5}$',Zip) = 1 ELSE INVALID 'Please enter a valid zip code';REQUIRED;"
+        },
+        "Verified": {
+         "Description": "Verified",
+         "Type": "ENUM('','Yes','Bad','Box','BadBox','BadSC','Endorse');",
+         "Rules": "INVISIBLE;"
+        }
+       }
+      }
+     ]
+    }
+   }
